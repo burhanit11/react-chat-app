@@ -1,6 +1,7 @@
 .chatList {
   flex: 1;
-  overflow: scroll;
+  /* overflow: scroll; */
+  overflow-y: scroll;
   .search {
     display: flex;
     align-items: center;
@@ -42,5 +43,21 @@
     padding: 20px;
     cursor: pointer;
     border-bottom: 1px solid #dddddd35;
+    img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+    }
+    .texts {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      span {
+        font-weight: 500;
+      }
+      p {
+        font-size: 14px;
+      }
+    }
   }
 }

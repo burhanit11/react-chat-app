@@ -6,6 +6,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -14,10 +15,21 @@ body {
   align-items: center;
   justify-content: center;
   height: 100vh;
-}
 
+  overflow-x: hidden;
+}
+::-webkit-scrollbar {
+  width: 8px; /* Set the width of the scrollbar */
+}
+::-webkit-scrollbar-thumb {
+  background: #888; /* Set the color of the thumb */
+  border-radius: 10px; /* Optional: add rounded corners */
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Change the color when hovered */
+}
 .container {
-  width: 90vw;
+  width: 85vw;
   height: 90vh;
   background-color: rgba(17, 25, 40, 0.75);
   backdrop-filter: blur(19px) saturate(180%);

@@ -8,9 +8,9 @@ const UserInfo = () => {
         <h2>Burhan</h2>
       </div>
       <div className="icons">
-        <img src="./more.png" alt="" className="iconImg" />
-        <img src="./video.png" alt="" className="iconImg" />
-        <img src="./edit.png" alt="" className="iconImg" />
+        <img src="./more.png" alt="" />
+        <img src="./video.png" alt="" />
+        <img src="./edit.png" alt="" />
       </div>
     </div>
   );
