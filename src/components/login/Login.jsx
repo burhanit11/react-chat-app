@@ -12,6 +12,8 @@ import upload from "../../lib/upload.js";
 
 const Login = () => {
   const [isLoading, setIsloading] = useState(false);
+  const [isLoading1, setIsloading1] = useState(false);
+
   const [avatar, setAavtar] = useState({
     file: null,
     url: "",
@@ -25,7 +27,7 @@ const Login = () => {
   };
 
   const handelLogin = async (e) => {
-    setIsloading(true);
+    setIsloading1(true);
     e.preventDefault();
     const formData = new FormData(e.target);
 
@@ -33,9 +35,9 @@ const Login = () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       toast.success("Login Sussess");
-      setIsloading(false);
+      setIsloading1(false);
     } catch (error) {
-      setIsloading(false);
+      setIsloading1(false);
       toast.error(error.message);
     }
   };
@@ -90,7 +92,7 @@ const Login = () => {
           />
           <button disabled={isLoading}>
             {" "}
-            {isLoading ? "Loading..." : "Sign In"}
+            {isLoading1 ? "Loading..." : "Sign In"}
           </button>
         </form>
       </div>
