@@ -130,7 +130,8 @@ const Chat = () => {
             <div className="texts ">
               {message.img ? <img src={message?.img} alt="" /> : null}
               <p>{message?.text}</p>
-              <span>1 min ago</span>
+              {/* <span>{message?.createAt}</span> */}
+              {console.log(message?.createAt, "?")}
             </div>
           </div>
         ))}
@@ -181,7 +182,8 @@ const Chat = () => {
         </div>
         <button
           className="sendBotton"
-          onClick={handleClick}
+          onKeyDown={(e) => e.key === "Enter" && handleClick(e)}
+          // onClick={handleClick}
           disabled={isCurrentUserBlocked || isReceiverBLocked}
         >
           send

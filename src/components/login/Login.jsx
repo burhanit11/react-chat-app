@@ -13,7 +13,10 @@ import upload from "../../lib/upload.js";
 const Login = () => {
   const [isLoading, setIsloading] = useState(false);
   const [isLoading1, setIsloading1] = useState(false);
-
+  const [loginVal, setLoginVal] = useState({
+    email: "",
+    password: "",
+  });
   const [avatar, setAavtar] = useState({
     file: null,
     url: "",
@@ -26,21 +29,33 @@ const Login = () => {
     });
   };
 
-  const handelLogin = async (e) => {
+  const handelLoginChange = async (e) => {
+    const { name, value } = e.target;
+    setLoginVal({
+      ...loginVal,
+      [name]: value,
+    });
+  };
+  const handelSubmit = async (e) => {
     setIsloading1(true);
     e.preventDefault();
-    const formData = new FormData(e.target);
-
-    const { email, password } = Object.fromEntries(formData);
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      await signInWithEmailAndPassword(auth, loginVal.email, loginVal.password);
       toast.success("Login Sussess");
       setIsloading1(false);
+      console.log(loginVal);
     } catch (error) {
       setIsloading1(false);
       toast.error(error.message);
     }
   };
+
+  // const handelLogin = async (e) => {
+  //   e.preventDefault();
+  //   const formData = new FormData(e.target);
+
+  //   const { email, password } = Object.fromEntries(formData);
+  // };
   const handelSignup = async (e) => {
     setIsloading(true);
     e.preventDefault();
@@ -77,20 +92,26 @@ const Login = () => {
     <div className="login">
       <div className="item">
         <h2>Welcome Back!</h2>
-        <form onSubmit={handelLogin}>
+        <form onSubmit={handelSubmit}>
           <input
             type="email"
             name="email"
             placeholder="Email"
-            // onChange={}
+            onChange={handelLoginChange}
+            value={loginVal.email}
           />
           <input
             type="password"
             name="password"
-            // value={value}
+            value={loginVal.password}
             placeholder="Password"
+            onChange={handelLoginChange}
           />
-          <button disabled={isLoading}>
+          <button
+            disabled={isLoading}
+            type="submit"
+            onKeyDown={(e) => e.key === "Enter" && handelSubmit(e)}
+          >
             {" "}
             {isLoading1 ? "Loading..." : "Sign In"}
           </button>

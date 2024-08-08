@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "dayjs": "^1.11.12",
     "emoji-picker-react": "^4.11.1",
     "firebase": "^10.12.5",
     "node-sass": "^9.0.0",
