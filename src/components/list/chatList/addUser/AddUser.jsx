@@ -1,44 +1,43 @@
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 import "./addUser.css";
 import {
   collection,
   doc,
-  getDocs,
-  query,
+  // getDocs,
+  // query,
   serverTimestamp,
   setDoc,
-  where,
+  // where,
   updateDoc,
   arrayUnion,
 } from "firebase/firestore";
 import { db } from "../../../../lib/firebase";
-import { useState } from "react";
+// import { useState } from "react";
 import useUserStore from "../../../../lib/userStore";
 
-const AddUser = () => {
-  const [user, setUser] = useState(null);
+const AddUser = ({ user }) => {
+  // const [user, setUser] = useState(null);
 
+  console.log(user, "user search");
   const { currentUser } = useUserStore();
 
-  const handleSearch = async (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
+  // const handleSearch = async (e) => {
+  //   e.preventDefault();
+  //   const formData = new FormData(e.target);
+  //   const username = formData.get("username");
+  //   try {
+  //     const userRef = collection(db, "users");
 
-    const username = formData.get("username");
-    console.log(username, "username");
-    try {
-      const userRef = collection(db, "users");
+  //     const q = query(userRef, where("username", "==", username));
 
-      const q = query(userRef, where("username", "==", username));
-
-      const querySnapShot = await getDocs(q);
-      if (!querySnapShot.empty) {
-        setUser(querySnapShot.docs[0].data());
-      }
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
+  //     const querySnapShot = await getDocs(q);
+  //     if (!querySnapShot.empty) {
+  //       setUser(querySnapShot.docs[0].data());
+  //     }
+  //   } catch (error) {
+  //     toast.error(error.message);
+  //   }
+  // };
 
   const handleAdd = async () => {
     const chatRef = collection(db, "chats");
@@ -73,10 +72,10 @@ const AddUser = () => {
 
   return (
     <div className="addUser">
-      <form onSubmit={handleSearch}>
-        <input type="text" name="username" id="" placeholder="Username" />
+      {/* <form onSubmit={handleSearch}>
+        <input type="text" name="username" placeholder="Username" />
         <button type="submit">Search</button>
-      </form>
+      </form> */}
       {user && (
         <div className="user">
           <div className="details">

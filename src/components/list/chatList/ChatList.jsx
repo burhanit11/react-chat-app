@@ -2,13 +2,23 @@ import { useEffect, useState } from "react";
 import "./chatList.css";
 import AddUser from "./addUser/AddUser";
 import useUserStore from "../../../lib/userStore";
-import { doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  onSnapshot,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import { db } from "../../../lib/firebase";
 import useChatStore from "../../../lib/chatStore";
 
 const ChatList = () => {
   const [addMode, setAddMode] = useState(false);
   const [chats, setChats] = useState([]);
+  const [user, setUser] = useState(null);
 
   const { currentUser } = useUserStore();
   const { changeChat } = useChatStore();
@@ -60,21 +70,45 @@ const ChatList = () => {
       console.log(error);
     }
   };
+  // handel search
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const username = formData.get("username");
+    try {
+      const userRef = collection(db, "users");
+
+      const q = query(userRef, where("username", "==", username));
+
+      const querySnapShot = await getDocs(q);
+      if (!querySnapShot.empty) {
+        setUser(querySnapShot.docs[0].data());
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   return (
     <div className="chatList">
-      <div className="search">
-        <div className="searchBar">
-          <img src="/search.png" alt="" />
-          <input type="text" placeholder="Search..." />
-        </div>
-        <img
+      <form onSubmit={handleSearch}>
+        <div className="search">
+          <div
+            className="searchBar"
+            onClick={() => setAddMode((prev) => !prev)}
+          >
+            <img src="/search.png" alt="" />
+            <input type="text" name="username" placeholder="Search..." />
+          </div>
+
+          {/* <img
           src={addMode ? "./minus.png" : "./plus.png"}
           alt=""
           className="add"
           onClick={() => setAddMode((prev) => !prev)}
-        />
-      </div>
+        /> */}
+        </div>
+      </form>
       {chats.map((chat) => (
         <div
           className="item"
@@ -92,7 +126,7 @@ const ChatList = () => {
         </div>
       ))}
 
-      {addMode && <AddUser />}
+      {addMode && <AddUser user={user} />}
     </div>
   );
 };

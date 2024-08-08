@@ -13,6 +13,11 @@ import upload from "../../lib/upload.js";
 const Login = () => {
   const [isLoading, setIsloading] = useState(false);
   const [isLoading1, setIsloading1] = useState(false);
+  const [signUpVal, setSignUpVal] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
   const [loginVal, setLoginVal] = useState({
     email: "",
     password: "",
@@ -22,6 +27,7 @@ const Login = () => {
     url: "",
   });
 
+  // handel avatar img
   const handleAvatar = (e) => {
     setAavtar({
       file: e.target.files[0],
@@ -29,6 +35,7 @@ const Login = () => {
     });
   };
 
+  // handle onchange login from
   const handelLoginChange = async (e) => {
     const { name, value } = e.target;
     setLoginVal({
@@ -36,6 +43,8 @@ const Login = () => {
       [name]: value,
     });
   };
+
+  // handel Login submit data
   const handelSubmit = async (e) => {
     setIsloading1(true);
     e.preventDefault();
@@ -43,36 +52,43 @@ const Login = () => {
       await signInWithEmailAndPassword(auth, loginVal.email, loginVal.password);
       toast.success("Login Sussess");
       setIsloading1(false);
-      console.log(loginVal);
+      setLoginVal({
+        email: "",
+        password: "",
+      });
     } catch (error) {
       setIsloading1(false);
       toast.error(error.message);
+      setLoginVal({
+        email: "",
+        password: "",
+      });
     }
   };
 
-  // const handelLogin = async (e) => {
-  //   e.preventDefault();
-  //   const formData = new FormData(e.target);
+  // handel sign up from On Change
+  const handelSignUpOnChange = async (e) => {
+    const { name, value } = e.target;
+    setSignUpVal({
+      ...signUpVal,
+      [name]: value,
+    });
+  };
 
-  //   const { email, password } = Object.fromEntries(formData);
-  // };
-  const handelSignup = async (e) => {
+  // handel signUp submit
+  const handelSignUpSubmit = async () => {
     setIsloading(true);
-    e.preventDefault();
-    const formData = new FormData(e.target);
-
-    const { username, email, password } = Object.fromEntries(formData);
-
     try {
-      const res = await createUserWithEmailAndPassword(auth, email, password);
-
+      const res = await createUserWithEmailAndPassword(
+        auth,
+        signUpVal.email,
+        signUpVal.password
+      );
       const imgUrl = await upload(avatar.file);
 
-      console.log(imgUrl, "imgURL");
-
       await setDoc(doc(db, "users", res.user.uid), {
-        username,
-        email,
+        username: signUpVal.username,
+        email: signUpVal.email,
         avatar: imgUrl,
         id: res.user.uid,
         blocked: [],
@@ -82,12 +98,29 @@ const Login = () => {
       });
       toast.success("Account Created! You can login Now!");
       setIsloading(false);
+      setSignUpVal({
+        username: "",
+        email: "",
+        password: "",
+      });
+      setAavtar({
+        file: null,
+        url: "",
+      });
     } catch (error) {
       toast.error(error.message);
       setIsloading(false);
+      setSignUpVal({
+        username: "",
+        email: "",
+        password: "",
+      });
+      setAavtar({
+        file: null,
+        url: "",
+      });
     }
   };
-
   return (
     <div className="login">
       <div className="item">
@@ -120,7 +153,7 @@ const Login = () => {
       <div className="separator"></div>
       <div className="item">
         <h2>Create an Account</h2>
-        <form onSubmit={handelSignup}>
+        <form onSubmit={handelSignUpSubmit}>
           <label htmlFor="file">
             <img src={avatar.url || "./avatar.png"} alt="" />
             Upload an Image
@@ -131,10 +164,32 @@ const Login = () => {
             style={{ display: "none" }}
             onChange={handleAvatar}
           />
-          <input type="text" name="username" placeholder="username" />
-          <input type="email" name="email" placeholder="Email" />
-          <input type="password" name="password" placeholder="Password" />
-          <button type="submit" disabled={isLoading}>
+          <input
+            type="text"
+            name="username"
+            placeholder="username"
+            onChange={handelSignUpOnChange}
+            value={setSignUpVal.username}
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            onChange={handelSignUpOnChange}
+            value={setSignUpVal.email}
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            onChange={handelSignUpOnChange}
+            value={setSignUpVal.password}
+          />
+          <button
+            type="submit"
+            disabled={isLoading}
+            onKeyDown={(e) => e.key === "Enter" && handelSignUpSubmit(e)}
+          >
             {isLoading ? "Loading..." : "Sign Up"}
           </button>
         </form>

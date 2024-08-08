@@ -22,6 +22,8 @@ const Chat = () => {
     url: "",
   });
 
+  console.log(img?.url, "img");
+
   const { chatId, user, isCurrentUserBlocked, isReceiverBLocked } =
     useChatStore();
   const { currentUser } = useUserStore();
@@ -42,9 +44,10 @@ const Chat = () => {
   }, [chatId]);
 
   const handelImg = async (e) => {
+    const imgfile = e.target.files ? e.target.files[0] : null;
     setImg({
       file: e.target.files[0],
-      url: URL.createObjectURL(e.target.files[0]),
+      url: URL.createObjectURL(imgfile),
     });
   };
 
@@ -143,7 +146,7 @@ const Chat = () => {
         )}
         <div ref={endRef}></div>
       </div>
-      <div className="bottom  xl:w-72  lg:w-52 md:w-40 sm:w-32">
+      <div className="bottom">
         <div className="icons">
           <label htmlFor="file">
             <img src="./img.png" alt="" />
@@ -182,6 +185,7 @@ const Chat = () => {
         <button
           className="sendBotton"
           onClick={handleClick}
+          // onKeyDown={(e) => e.key === "Enter" && handleClick(e)}
           disabled={isCurrentUserBlocked || isReceiverBLocked}
         >
           send
