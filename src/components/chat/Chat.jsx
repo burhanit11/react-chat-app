@@ -130,8 +130,7 @@ const Chat = () => {
             <div className="texts ">
               {message.img ? <img src={message?.img} alt="" /> : null}
               <p>{message?.text}</p>
-              {/* <span>{message?.createAt}</span> */}
-              {console.log(message?.createAt, "?")}
+              <span>1 min ago</span>
             </div>
           </div>
         ))}
@@ -144,7 +143,7 @@ const Chat = () => {
         )}
         <div ref={endRef}></div>
       </div>
-      <div className="bottom">
+      <div className="bottom  xl:w-72  lg:w-52 md:w-40 sm:w-32">
         <div className="icons">
           <label htmlFor="file">
             <img src="./img.png" alt="" />
@@ -182,8 +181,7 @@ const Chat = () => {
         </div>
         <button
           className="sendBotton"
-          onKeyDown={(e) => e.key === "Enter" && handleClick(e)}
-          // onClick={handleClick}
+          onClick={handleClick}
           disabled={isCurrentUserBlocked || isReceiverBLocked}
         >
           send
